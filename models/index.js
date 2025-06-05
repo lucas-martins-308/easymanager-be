@@ -1,5 +1,18 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const Endereco = require('./Endereco');
+const Usuario = require('./Usuario');
+const Fornecedor = require('./Fornecedor');
+const Hospede = require('./Hospede');
+const EstoqueItem = require('./EstoqueItem');
+const Reserva = require('./Reserva');
+const ServicoExtra = require('./ServicoExtra');
+const Pagamento = require('./Pagamento');
+const Quarto = require('./Quarto');
+const ServicoExtra_has_Reserva = require('./ServicoExtra_has_Reserva');
+const Hospede_has_Reserva = require('./Hospede_has_Reserva');
+const EstoqueItem_has_ServicoExtra = require('./EstoqueItem_has_ServicoExtra');
+const Quarto_has_Reserva = require('./Quarto_has_Reserva');
 
 const Produto = sequelize.define('Produto', {
   nome_item: {
@@ -26,4 +39,17 @@ const Produto = sequelize.define('Produto', {
 module.exports = {
   sequelize,
   Produto,
+  Endereco,
+  Usuario,
+  Fornecedor,
+  Hospede,
+  EstoqueItem,
+  Reserva,
+  ServicoExtra,
+  Pagamento,
+  Quarto,
+  ServicoExtra_has_Reserva,
+  Hospede_has_Reserva,
+  EstoqueItem_has_ServicoExtra,
+  Quarto_has_Reserva,
 };

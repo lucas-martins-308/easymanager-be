@@ -1,12 +1,25 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const sequelize = require('./config/database');
 const { Produto } = require('./models');
 const fs = require('fs');
 const mysql = require('mysql2/promise');
 
 const app = express();
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
+
+// Importar e usar as rotas de Usuario
+const usuarioRoutes = require('./routes/UsuarioRoutes');
+app.use('/api/usuarios', usuarioRoutes);
+
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);
 
 const PORT = process.env.PORT || 3000;
 
