@@ -14,12 +14,12 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Importar e usar as rotas de Usuario
-const usuarioRoutes = require('./routes/UsuarioRoutes');
-app.use('/api/usuarios', usuarioRoutes);
-
-const authRoutes = require('./routes/authRoutes');
-app.use('/api/auth', authRoutes);
+// Rotas
+app.use('/api/auth', require('./routes/AuthRoutes'));
+app.use('/api/reservas', require('./routes/ReservaRoutes'));
+app.use('/api/pagamentos', require('./routes/PagamentoRoutes'));
+app.use('/api/hospedes', require('./routes/HospedeRoutes'));
+app.use('/api/usuarios', require('./routes/UsuarioRoutes'));
 
 const PORT = process.env.PORT || 3000;
 

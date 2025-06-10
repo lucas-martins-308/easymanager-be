@@ -1,35 +1,37 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const Reserva = require('./Reserva');
 
 const Pagamento = sequelize.define('Pagamento', {
-  idPagamento: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true,
+    autoIncrement: true
   },
-  valorPago: {
+  valor: {
     type: DataTypes.DECIMAL(10, 2),
-    allowNull: false,
+    allowNull: false
   },
-  dtPagamento: {
-    type: DataTypes.DATEONLY,
-    allowNull: false,
+  dataPagamento: {
+    type: DataTypes.DATE,
+    allowNull: false
   },
   metodoPagamento: {
-    type: DataTypes.ENUM('credito', 'debito', 'dinheiro', 'pix'),
-    allowNull: false,
+    type: DataTypes.ENUM('cartao', 'dinheiro', 'pix', 'transferencia'),
+    allowNull: false
   },
-  Reserva_idReserva: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Reserva',
-      key: 'idReserva',
-    },
+  status: {
+    type: DataTypes.ENUM('pendente', 'confirmado', 'cancelado'),
+    defaultValue: 'pendente'
   },
-}, {
-  tableName: 'Pagamento',
-  timestamps: false,
+  comprovante: {
+    type: DataTypes.STRING
+  },
+  observacoes: {
+    type: DataTypes.TEXT
+  }
 });
+
+Pagamento.belongsTo(Reserva, { foreignKey: 'reservaId' });
 
 module.exports = Pagamento; 

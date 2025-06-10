@@ -1,33 +1,44 @@
-const Usuario = require('../models/Usuario');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const Usuario = require('../models/Usuario');
 
-exports.login = async (req, res) => {
-  const { email, senha } = req.body;
-  try {
-    const usuario = await Usuario.findOne({ where: { email } });
-    if (!usuario) {
-      return res.status(401).json({ message: 'Usuário ou senha inválidos' });
-    }
-    const senhaValida = await bcrypt.compare(senha, usuario.senha);
-    if (!senhaValida) {
-      return res.status(401).json({ message: 'Usuário ou senha inválidos' });
-    }
-    const token = jwt.sign({ id: usuario.idUsuario, email: usuario.email }, process.env.JWT_SECRET, { expiresIn: '1d' });
-    res.json({
-      token,
-      usuario: {
-        id: usuario.idUsuario,
-        nome: usuario.nomeCompleto,
-        email: usuario.email,
-        role: usuario.tipoUsuario,
-        cpf: usuario.cpf,
-        dtNascimento: usuario.dtNascimento,
-        telefone: usuario.telefone,
-        Endereco_idEndereco: usuario.Endereco_idEndereco
+class AuthController {
+  async login(req, res) {
+    try {
+      const { email, senha } = req.body;
+
+      const usuario = await Usuario.findOne({ where: { email } });
+      if (!usuario) {
+        return res.status(401).json({ message: 'Credenciais inválidas' });
       }
-    });
-  } catch (err) {
-    res.status(500).json({ message: 'Erro no servidor', error: err.message });
+
+      const senhaValida = await usuario.validarSenha(senha);
+      if (!senhaValida) {
+        return res.status(401).json({ message: 'Credenciais inválidas' });
+      }
+
+      if (!usuario.ativo) {
+        return res.status(401).json({ message: 'Usuário inativo' });
+      }
+
+      const token = jwt.sign(
+        { id: usuario.id, tipo: usuario.tipo },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' }
+      );
+
+      res.json({
+        token,
+        usuario: {
+          id: usuario.id,
+          nome: usuario.nome,
+          email: usuario.email,
+          tipo: usuario.tipo
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-}; 
+}
+
+module.exports = new AuthController(); 
