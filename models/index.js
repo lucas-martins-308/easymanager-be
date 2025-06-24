@@ -49,6 +49,30 @@ Endereco.hasMany(Fornecedor, {
   as: 'fornecedores'
 });
 
+EstoqueItem.belongsTo(Fornecedor, {
+  foreignKey: 'Fornecedor_idFornecedor',
+  targetKey: 'idFornecedor',
+  as: 'fornecedor'
+});
+
+Fornecedor.hasMany(EstoqueItem, {
+  foreignKey: 'Fornecedor_idFornecedor',
+  sourceKey: 'idFornecedor',
+  as: 'estoqueItems'
+});
+
+Hospede.belongsTo(Endereco, {
+  foreignKey: 'Endereco_idEndereco',
+  targetKey: 'idEndereco',
+  as: 'endereco'
+});
+
+Endereco.hasMany(Hospede, {
+  foreignKey: 'Endereco_idEndereco',
+  sourceKey: 'idEndereco',
+  as: 'hospedes'
+});
+
 module.exports = {
   sequelize,
   Produto,

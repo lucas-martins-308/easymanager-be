@@ -31,12 +31,12 @@ const EstoqueItem = sequelize.define('EstoqueItem', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Fornecedor',
+      model: 'fornecedor',
       key: 'idFornecedor',
     },
   },
 }, {
-  tableName: 'EstoqueItem',
+  tableName: 'estoqueitem',
   timestamps: false,
 });
 

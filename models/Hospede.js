@@ -2,52 +2,58 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 
 const Hospede = sequelize.define('Hospede', {
-  id: {
+  idHospede: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
   },
   nome: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(45),
     allowNull: false
   },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true
-    }
-  },
-  telefone: {
-    type: DataTypes.STRING,
+  sobrenome: {
+    type: DataTypes.STRING(45),
     allowNull: false
   },
-  cpf: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
+  documento: {
+    type: DataTypes.STRING(45),
+    allowNull: false
   },
-  dataNascimento: {
+  tipoDocumento: {
+    type: DataTypes.STRING(45),
+    allowNull: false
+  },
+  dtNascimento: {
     type: DataTypes.DATEONLY,
     allowNull: false
   },
-  endereco: {
-    type: DataTypes.STRING,
+  telefone: {
+    type: DataTypes.STRING(15),
     allowNull: false
   },
-  cidade: {
-    type: DataTypes.STRING,
+  email: {
+    type: DataTypes.STRING(45),
+    allowNull: true
+  },
+  genero: {
+    type: DataTypes.STRING(1),
     allowNull: false
   },
-  estado: {
-    type: DataTypes.STRING(2),
-    allowNull: false
+  preferencia: {
+    type: DataTypes.STRING(45),
+    allowNull: true
   },
-  pais: {
-    type: DataTypes.STRING,
-    allowNull: false
+  Endereco_idEndereco: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'endereco',
+      key: 'idEndereco'
+    }
   }
+}, {
+  tableName: 'hospede',
+  timestamps: false
 });
 
 module.exports = Hospede; 
