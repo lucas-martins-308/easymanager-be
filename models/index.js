@@ -36,6 +36,19 @@ const Produto = sequelize.define('Produto', {
   timestamps: true,
 });
 
+// Definindo associações
+Fornecedor.belongsTo(Endereco, { 
+  foreignKey: 'Endereco_idEndereco', 
+  targetKey: 'idEndereco',
+  as: 'endereco'
+});
+
+Endereco.hasMany(Fornecedor, { 
+  foreignKey: 'Endereco_idEndereco', 
+  sourceKey: 'idEndereco',
+  as: 'fornecedores'
+});
+
 module.exports = {
   sequelize,
   Produto,

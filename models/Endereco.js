@@ -36,7 +36,7 @@ const Endereco = sequelize.define('Endereco', {
     allowNull: false,
   },
 }, {
-  tableName: 'Endereco',
+  tableName: 'endereco',
   timestamps: false,
 });
 

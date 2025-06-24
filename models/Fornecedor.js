@@ -23,12 +23,12 @@ const Fornecedor = sequelize.define('Fornecedor', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Endereco',
+      model: 'endereco',
       key: 'idEndereco',
     },
   },
 }, {
-  tableName: 'Fornecedor',
+  tableName: 'fornecedor',
   timestamps: false,
 });
 

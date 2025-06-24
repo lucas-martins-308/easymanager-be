@@ -21,7 +21,7 @@ class AuthController {
       }
 
       const token = jwt.sign(
-        { id: usuario.id, tipo: usuario.tipo },
+        { id: usuario.idUsuario, tipo: usuario.tipoUsuario },
         process.env.JWT_SECRET,
         { expiresIn: '24h' }
       );
@@ -29,10 +29,10 @@ class AuthController {
       res.json({
         token,
         usuario: {
-          id: usuario.id,
-          nome: usuario.nome,
+          id: usuario.idUsuario,
+          nome: usuario.nomeCompleto,
           email: usuario.email,
-          tipo: usuario.tipo
+          tipo: usuario.tipoUsuario
         }
       });
     } catch (error) {
