@@ -5,6 +5,7 @@ const sequelize = require('./config/database');
 const { Produto } = require('./models');
 const fs = require('fs');
 const mysql = require('mysql2/promise');
+const authMiddleware = require('./middlewares/auth');
 
 const app = express();
 app.use(cors({
@@ -15,11 +16,17 @@ app.use(cors({
 app.use(express.json());
 
 // Rotas
-app.use('/api/auth', require('./routes/AuthRoutes'));
-app.use('/api/reservas', require('./routes/ReservaRoutes'));
-app.use('/api/pagamentos', require('./routes/PagamentoRoutes'));
-app.use('/api/hospedes', require('./routes/HospedeRoutes'));
-app.use('/api/usuarios', require('./routes/UsuarioRoutes'));
+const authRoutes = require('./routes/AuthRoutes');
+const usuarioRoutes = require('./routes/UsuarioRoutes');
+const hospedeRoutes = require('./routes/HospedeRoutes');
+const reservaRoutes = require('./routes/ReservaRoutes');
+const pagamentoRoutes = require('./routes/PagamentoRoutes');
+
+app.use('/api/auth', authRoutes);
+app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/hospedes', hospedeRoutes);
+app.use('/api/reservas', reservaRoutes);
+app.use('/api/pagamentos', pagamentoRoutes);
 
 const PORT = process.env.PORT || 3000;
 
