@@ -16,7 +16,7 @@ app.use(cors({
 app.use(express.json());
 
 // Rotas
-const authRoutes = require('./routes/AuthRoutes');
+const authRoutes = require('./routes/AuthenticationRoutes');
 const usuarioRoutes = require('./routes/UsuarioRoutes');
 const hospedeRoutes = require('./routes/HospedeRoutes');
 const reservaRoutes = require('./routes/ReservaRoutes');
