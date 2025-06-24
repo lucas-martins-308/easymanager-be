@@ -6,7 +6,6 @@ const { Produto } = require('./models');
 const fs = require('fs');
 const mysql = require('mysql2/promise');
 const authMiddleware = require('./middlewares/auth');
-const AuthController = require('../controllers/AuthenticationController');
 
 const app = express();
 app.use(cors({
