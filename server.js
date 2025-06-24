@@ -16,11 +16,11 @@ app.use(cors({
 app.use(express.json());
 
 // Rotas
-const authRoutes = require('./routes/AuthRoutes');
-const usuarioRoutes = require('./routes/UsuarioRoutes');
-const hospedeRoutes = require('./routes/HospedeRoutes');
-const reservaRoutes = require('./routes/ReservaRoutes');
-const pagamentoRoutes = require('./routes/PagamentoRoutes');
+const authRoutes = require('./routes/authRoutes');
+const usuarioRoutes = require('./routes/usuarioRoutes');
+const hospedeRoutes = require('./routes/hospedeRoutes');
+const reservaRoutes = require('./routes/reservaRoutes');
+const pagamentoRoutes = require('./routes/pagamentoRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', usuarioRoutes);
