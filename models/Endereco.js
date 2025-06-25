@@ -6,6 +6,7 @@ const Endereco = sequelize.define('Endereco', {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
+    field: 'idEndereco'
   },
   cep: {
     type: DataTypes.STRING(8),

@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const sequelize = require('./config/database');
-const { Produto } = require('./models');
+const { Produto, Usuario, Endereco } = require('./models');
 const fs = require('fs');
 const mysql = require('mysql2/promise');
 const authMiddleware = require('./middlewares/auth');
@@ -48,10 +48,44 @@ async function runSqlScriptIfNeeded() {
 
 (async () => {
   await runSqlScriptIfNeeded();
-  // ... o restante do seu código para iniciar o Express e sincronizar o Sequelize
   sequelize.sync()
-    .then(() => {
+    .then(async () => {
       console.log('Banco sincronizado com sucesso.');
+      // Criação do usuário admin padrão
+      try {
+        const emailAdmin = 'admin@admin.com';
+        const senhaAdmin = 'admin123';
+        let usuarioAdmin = await Usuario.findOne({ where: { email: emailAdmin } });
+        if (!usuarioAdmin) {
+          console.log('Usuário admin não encontrado, criando...');
+          // Criar endereço mínimo para o admin
+          const enderecoAdmin = await Endereco.create({
+            cep: '00000000',
+            logradouro: 'Rua Admin',
+            numero: 1,
+            complemento: 'Admin',
+            cidade: 'AdminCity',
+            estado: 'AD',
+            pais: 'Brasil'
+          });
+          await Usuario.create({
+            nomeCompleto: 'Administrador',
+            cpf: '00000000000',
+            dtNascimento: new Date(1990, 0, 1),
+            telefone: '00000000000',
+            email: emailAdmin,
+            senha: senhaAdmin,
+            tipoUsuario: 'adm',
+            ativo: true,
+            Endereco_idEndereco: enderecoAdmin.idEndereco
+          });
+          console.log('Usuário admin padrão criado!');
+        } else {
+          console.log('Usuário admin já existe.');
+        }
+      } catch (err) {
+        console.error('Erro ao criar usuário admin:', err);
+      }
       app.listen(PORT, () => {
         console.log(`Servidor rodando na porta ${PORT}`);
       });
