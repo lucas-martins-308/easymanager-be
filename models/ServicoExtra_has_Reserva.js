@@ -9,7 +9,7 @@ const ServicoExtra_has_Reserva = sequelize.define('ServicoExtra_has_Reserva', {
       model: 'ServicoExtra',
       key: 'idServicoExtra',
     },
-    field: 'idServicoExtra',
+    field: 'ServicoExtra_idServicoExtra',
   },
   Reserva_idReserva: {
     type: DataTypes.INTEGER,
@@ -18,7 +18,7 @@ const ServicoExtra_has_Reserva = sequelize.define('ServicoExtra_has_Reserva', {
       model: 'Reserva',
       key: 'idReserva',
     },
-    field: 'idReserva',
+    field: 'Reserva_idReserva',
   },
 }, {
   tableName: 'ServicoExtra_has_Reserva',
