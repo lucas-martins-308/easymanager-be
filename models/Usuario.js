@@ -6,23 +6,28 @@ const Usuario = sequelize.define('Usuario', {
   idUsuario: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
+    field: 'idUsuario'
   },
   nomeCompleto: {
     type: DataTypes.STRING(100),
-    allowNull: false
+    allowNull: false,
+    field: 'nomeCompleto'
   },
   cpf: {
     type: DataTypes.STRING(11),
-    allowNull: false
+    allowNull: false,
+    field: 'cpf'
   },
   dtNascimento: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: false,
+    field: 'dtNascimento'
   },
   telefone: {
     type: DataTypes.STRING(15),
-    allowNull: false
+    allowNull: false,
+    field: 'telefone'
   },
   email: {
     type: DataTypes.STRING(45),
@@ -30,26 +35,30 @@ const Usuario = sequelize.define('Usuario', {
     unique: true,
     validate: {
       isEmail: true
-    }
+    },
+    field: 'email'
   },
   senha: {
-    type: DataTypes.STRING(100),
-    allowNull: false
+    type: DataTypes.STRING(10),
+    allowNull: false,
+    field: 'senha'
   },
   tipoUsuario: {
     type: DataTypes.ENUM('adm', 'func'),
-    allowNull: false
+    allowNull: false,
+    field: 'tipoUsuario'
   },
   Endereco_idEndereco: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    field: 'Endereco_idEndereco',
     references: {
-      model: 'endereco',
+      model: 'Endereco',
       key: 'idEndereco'
     }
   }
 }, {
-  tableName: 'usuario',
+  tableName: 'Usuario',
   timestamps: false,
   hooks: {
     beforeCreate: async (usuario) => {
