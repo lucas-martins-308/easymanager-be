@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `projeto`.`Usuario` (
   `dtNascimento` DATE NOT NULL,
   `telefone` VARCHAR(15) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
-  `senha` VARCHAR(10) NOT NULL,
+  `senha` VARCHAR(100) NOT NULL,
   `tipoUsuario` ENUM("adm", "func") NOT NULL,
   `Endereco_idEndereco` INT NOT NULL,
   PRIMARY KEY (`idUsuario`),
@@ -128,7 +128,14 @@ CREATE TABLE IF NOT EXISTS `projeto`.`Reserva` (
   `valorReserva` DECIMAL(10,2) NOT NULL,
   `canalReserva` VARCHAR(45) NOT NULL,
   `statusReserva` ENUM("confirmada", "cancelada", "pendente") NOT NULL,
-  PRIMARY KEY (`idReserva`))
+  `hospedeId` INT,
+  PRIMARY KEY (`idReserva`),
+  INDEX `fk_reserva_hospede_idx` (`hospedeId` ASC) VISIBLE,
+  CONSTRAINT `fk_reserva_hospede`
+    FOREIGN KEY (`hospedeId`)
+    REFERENCES `projeto`.`Hospede` (`idHospede`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -332,6 +339,15 @@ INSERT INTO Quarto (numeroQuarto, tipoQuarto, precoDiaria, capacidade, statusQua
 (108, 'Luxo', 200.00, 2, 'disponivel'),
 (109, 'Suíte', 350.00, 4, 'disponivel'),
 (110, 'Standard', 120.00, 2, 'disponivel');
+
+-- Adiciona a coluna hospedeId se não existir
+-- ALTER TABLE Reserva ADD COLUMN IF NOT EXISTS hospedeId INT;
+
+-- Atualiza todas as reservas antigas para apontar para um hóspede válido (exemplo: 1)
+-- UPDATE Reserva SET hospedeId = 1 WHERE hospedeId IS NULL OR hospedeId NOT IN (SELECT idHospede FROM Hospede);
+
+-- Cria a constraint de chave estrangeira
+-- ALTER TABLE Reserva ADD CONSTRAINT IF NOT EXISTS fk_reserva_hospede FOREIGN KEY (hospedeId) REFERENCES Hospede(idHospede);
 
 
 

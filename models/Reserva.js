@@ -3,36 +3,51 @@ const sequelize = require('../config/database');
 const Hospede = require('./Hospede');
 
 const Reserva = sequelize.define('Reserva', {
-  id: {
+  idReserva: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
+    field: 'idReserva'
   },
-  dataCheckin: {
+  dtCheckin: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: false,
+    field: 'dtCheckin'
   },
-  dataCheckout: {
+  dtCheckout: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: false,
+    field: 'dtCheckout'
   },
-  status: {
-    type: DataTypes.ENUM('pendente', 'confirmada', 'checkin', 'checkout', 'cancelada'),
-    defaultValue: 'pendente'
-  },
-  valorTotal: {
+  valorReserva: {
     type: DataTypes.DECIMAL(10, 2),
-    allowNull: false
+    allowNull: false,
+    field: 'valorReserva'
   },
-  observacoes: {
-    type: DataTypes.TEXT
+  canalReserva: {
+    type: DataTypes.STRING(45),
+    allowNull: false,
+    field: 'canalReserva'
   },
-  numeroQuarto: {
-    type: DataTypes.STRING,
-    allowNull: false
+  statusReserva: {
+    type: DataTypes.ENUM('confirmada', 'cancelada', 'pendente'),
+    allowNull: false,
+    field: 'statusReserva'
+  },
+  hospedeId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    field: 'hospedeId',
+    references: {
+      model: 'Hospede',
+      key: 'idHospede'
+    }
   }
+}, {
+  tableName: 'Reserva',
+  timestamps: false
 });
 
-Reserva.belongsTo(Hospede, { foreignKey: 'hospedeId' });
+// Associação definida no models/index.js
 
 module.exports = Reserva; 

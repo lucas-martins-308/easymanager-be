@@ -48,12 +48,6 @@ const Usuario = sequelize.define('Usuario', {
     allowNull: false,
     field: 'tipoUsuario'
   },
-  ativo: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: true,
-    field: 'ativo'
-  },
   Endereco_idEndereco: {
     type: DataTypes.INTEGER,
     allowNull: false,

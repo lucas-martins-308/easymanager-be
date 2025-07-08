@@ -1,29 +1,55 @@
 const Reserva = require('../models/Reserva');
 const Hospede = require('../models/Hospede');
+const Quarto = require('../models/Quarto');
 
 class ReservaController {
   async listar(req, res) {
     try {
+      console.log('Iniciando busca de reservas...');
       const reservas = await Reserva.findAll({
-        include: [{ model: Hospede }]
+        include: [
+          { model: Hospede, as: 'hospede' },
+          { model: Quarto, as: 'quartos' }
+        ]
       });
-      res.json(reservas);
+      console.log(`Encontradas ${reservas.length} reservas`);
+      const reservasMapeadas = reservas.map(r => ({
+        idReserva: r.idReserva,
+        dataCheckin: r.dtCheckin,
+        dataCheckout: r.dtCheckout,
+        valorTotal: r.valorReserva,
+        canal: r.canalReserva,
+        status: r.statusReserva,
+        Hospede: r.hospede || null,
+        quarto: r.quartos && r.quartos.length > 0 ? r.quartos[0].numeroQuarto : null
+      }));
+      res.json(reservasMapeadas);
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      console.error('Erro ao buscar reservas:', error);
+      res.status(500).json({ message: error.message, stack: error.stack });
     }
   }
 
   async buscarPorId(req, res) {
     try {
       const reserva = await Reserva.findByPk(req.params.id, {
-        include: [{ model: Hospede }]
+        include: [{ model: Hospede, as: 'hospede' }]
       });
       
       if (!reserva) {
         return res.status(404).json({ message: 'Reserva não encontrada' });
       }
       
-      res.json(reserva);
+      const reservaMapeada = {
+        idReserva: reserva.idReserva,
+        dataCheckin: reserva.dtCheckin,
+        dataCheckout: reserva.dtCheckout,
+        valorTotal: reserva.valorReserva,
+        canal: reserva.canalReserva,
+        status: reserva.statusReserva,
+        Hospede: reserva.hospede || null,
+      };
+      res.json(reservaMapeada);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
@@ -49,7 +75,7 @@ class ReservaController {
       }
       
       const reserva = await Reserva.findByPk(req.params.id, {
-        include: [{ model: Hospede }]
+        include: [{ model: Hospede, as: 'hospedes' }]
       });
       
       res.json(reserva);

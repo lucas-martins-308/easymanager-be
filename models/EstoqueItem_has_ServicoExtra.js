@@ -5,6 +5,7 @@ const EstoqueItem_has_ServicoExtra = sequelize.define('EstoqueItem_has_ServicoEx
   EstoqueItem_idItem: {
     type: DataTypes.INTEGER,
     primaryKey: true,
+    field: 'EstoqueItem_idItem',
     references: {
       model: 'EstoqueItem',
       key: 'idItem',
@@ -13,6 +14,7 @@ const EstoqueItem_has_ServicoExtra = sequelize.define('EstoqueItem_has_ServicoEx
   ServicoExtra_idServicoExtra: {
     type: DataTypes.INTEGER,
     primaryKey: true,
+    field: 'ServicoExtra_idServicoExtra',
     references: {
       model: 'ServicoExtra',
       key: 'idServicoExtra',

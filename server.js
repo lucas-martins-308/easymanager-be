@@ -2,7 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const sequelize = require('./config/database');
-const { Produto, Usuario, Endereco } = require('./models');
+const models = require('./models');
+const { Produto, Usuario, Endereco, Fornecedor } = models;
 const fs = require('fs');
 const mysql = require('mysql2/promise');
 const authMiddleware = require('./middlewares/auth');
@@ -22,12 +23,18 @@ const usuarioRoutes = require('./routes/UsuarioRoutes');
 const hospedeRoutes = require('./routes/HospedeRoutes');
 const reservaRoutes = require('./routes/ReservaRoutes');
 const pagamentoRoutes = require('./routes/PagamentoRoutes');
+const estoqueItemRoutes = require('./routes/EstoqueItemRoutes');
+const quartoRoutes = require('./routes/QuartoRoutes');
+const fornecedorRoutes = require('./routes/FornecedorRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/hospedes', hospedeRoutes);
 app.use('/api/reservas', reservaRoutes);
 app.use('/api/pagamentos', pagamentoRoutes);
+app.use('/api/itens', estoqueItemRoutes);
+app.use('/api/quartos', quartoRoutes);
+app.use('/api/fornecedores', fornecedorRoutes);
 
 const PORT = process.env.PORT || 3000;
 
@@ -76,7 +83,6 @@ async function runSqlScriptIfNeeded() {
             email: emailAdmin,
             senha: senhaAdmin,
             tipoUsuario: 'adm',
-            ativo: true,
             Endereco_idEndereco: enderecoAdmin.idEndereco
           });
           console.log('Usuário admin padrão criado!');
@@ -97,6 +103,11 @@ async function runSqlScriptIfNeeded() {
 
 app.get('/', (req, res) => {
   res.send('EasyManager Backend funcionando!');
+});
+
+// Rota de teste para fornecedores
+app.get('/test-fornecedores', (req, res) => {
+  res.json({ message: 'Rota de fornecedores funcionando!' });
 });
 
 // Rota para criar produto

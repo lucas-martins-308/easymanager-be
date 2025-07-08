@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/Usuario');
+const env = require('../config/env');
 
 class AuthController {
   async login(req, res) {
@@ -16,13 +17,9 @@ class AuthController {
         return res.status(401).json({ message: 'Credenciais inválidas' });
       }
 
-      if (!usuario.ativo) {
-        return res.status(401).json({ message: 'Usuário inativo' });
-      }
-
       const token = jwt.sign(
         { id: usuario.idUsuario, tipo: usuario.tipoUsuario },
-        process.env.JWT_SECRET,
+        env.JWT_SECRET,
         { expiresIn: '24h' }
       );
 

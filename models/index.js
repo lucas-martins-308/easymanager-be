@@ -73,6 +73,31 @@ Endereco.hasMany(Hospede, {
   as: 'hospedes'
 });
 
+// Relacionamento correto Reserva-Hospede (1:N)
+Hospede.hasMany(Reserva, {
+  foreignKey: 'hospedeId',
+  sourceKey: 'idHospede',
+  as: 'reservas'
+});
+Reserva.belongsTo(Hospede, {
+  foreignKey: 'hospedeId',
+  targetKey: 'idHospede',
+  as: 'hospede'
+});
+
+Reserva.belongsToMany(Quarto, {
+  through: Quarto_has_Reserva,
+  foreignKey: 'Reserva_idReserva',
+  otherKey: 'Quarto_idQuarto',
+  as: 'quartos'
+});
+Quarto.belongsToMany(Reserva, {
+  through: Quarto_has_Reserva,
+  foreignKey: 'Quarto_idQuarto',
+  otherKey: 'Reserva_idReserva',
+  as: 'reservas'
+});
+
 module.exports = {
   sequelize,
   Produto,
