@@ -13,6 +13,7 @@ class ReservaController {
         ]
       });
       console.log(`Encontradas ${reservas.length} reservas`);
+      
       const reservasMapeadas = reservas.map(r => ({
         idReserva: r.idReserva,
         dataCheckin: r.dtCheckin,
@@ -23,6 +24,7 @@ class ReservaController {
         Hospede: r.hospede || null,
         quarto: r.quartos && r.quartos.length > 0 ? r.quartos[0].numeroQuarto : null
       }));
+      
       res.json(reservasMapeadas);
     } catch (error) {
       console.error('Erro ao buscar reservas:', error);
@@ -58,8 +60,38 @@ class ReservaController {
   async criar(req, res) {
     try {
       const reserva = await Reserva.create(req.body);
-      res.status(201).json(reserva);
+      
+      // Se houver quartos especificados, criar as associações
+      if (req.body.quartoId) {
+        const Quarto_has_Reserva = require('../models/Quarto_has_Reserva');
+        await Quarto_has_Reserva.create({
+          Quarto_idQuarto: req.body.quartoId,
+          Reserva_idReserva: reserva.idReserva
+        });
+      }
+      
+      // Buscar a reserva criada com as associações
+      const reservaCompleta = await Reserva.findByPk(reserva.idReserva, {
+        include: [
+          { model: Hospede, as: 'hospede' },
+          { model: Quarto, as: 'quartos' }
+        ]
+      });
+      
+      const reservaMapeada = {
+        idReserva: reservaCompleta.idReserva,
+        dataCheckin: reservaCompleta.dtCheckin,
+        dataCheckout: reservaCompleta.dtCheckout,
+        valorTotal: reservaCompleta.valorReserva,
+        canal: reservaCompleta.canalReserva,
+        status: reservaCompleta.statusReserva,
+        Hospede: reservaCompleta.hospede || null,
+        quarto: reservaCompleta.quartos && reservaCompleta.quartos.length > 0 ? reservaCompleta.quartos[0].numeroQuarto : null
+      };
+      
+      res.status(201).json(reservaMapeada);
     } catch (error) {
+      console.error('Erro ao criar reserva:', error);
       res.status(400).json({ message: error.message });
     }
   }
@@ -67,7 +99,7 @@ class ReservaController {
   async atualizar(req, res) {
     try {
       const [updated] = await Reserva.update(req.body, {
-        where: { id: req.params.id }
+        where: { idReserva: req.params.id }
       });
       
       if (!updated) {
@@ -75,7 +107,7 @@ class ReservaController {
       }
       
       const reserva = await Reserva.findByPk(req.params.id, {
-        include: [{ model: Hospede, as: 'hospedes' }]
+        include: [{ model: Hospede, as: 'hospede' }]
       });
       
       res.json(reserva);
@@ -87,8 +119,8 @@ class ReservaController {
   async cancelar(req, res) {
     try {
       const [updated] = await Reserva.update(
-        { status: 'cancelada' },
-        { where: { id: req.params.id } }
+        { statusReserva: 'cancelada' },
+        { where: { idReserva: req.params.id } }
       );
       
       if (!updated) {
@@ -104,8 +136,8 @@ class ReservaController {
   async checkin(req, res) {
     try {
       const [updated] = await Reserva.update(
-        { status: 'checkin' },
-        { where: { id: req.params.id } }
+        { statusReserva: 'confirmada' },
+        { where: { idReserva: req.params.id } }
       );
       
       if (!updated) {
@@ -121,8 +153,8 @@ class ReservaController {
   async checkout(req, res) {
     try {
       const [updated] = await Reserva.update(
-        { status: 'checkout' },
-        { where: { id: req.params.id } }
+        { statusReserva: 'confirmada' },
+        { where: { idReserva: req.params.id } }
       );
       
       if (!updated) {
@@ -130,6 +162,22 @@ class ReservaController {
       }
       
       res.json({ message: 'Check-out realizado com sucesso' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  async delete(req, res) {
+    try {
+      const deleted = await Reserva.destroy({
+        where: { idReserva: req.params.id }
+      });
+      
+      if (!deleted) {
+        return res.status(404).json({ message: 'Reserva não encontrada' });
+      }
+      
+      res.json({ message: 'Reserva excluída com sucesso' });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

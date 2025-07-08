@@ -9,7 +9,7 @@ router.get('/', ReservaController.listar);
 router.get('/:id', ReservaController.buscarPorId);
 router.post('/', ReservaController.criar);
 router.put('/:id', ReservaController.atualizar);
-router.delete('/:id', ReservaController.cancelar);
+router.delete('/:id', ReservaController.delete);
 router.post('/:id/checkin', ReservaController.checkin);
 router.post('/:id/checkout', ReservaController.checkout);
 
