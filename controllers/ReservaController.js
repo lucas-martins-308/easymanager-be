@@ -59,7 +59,20 @@ class ReservaController {
 
   async criar(req, res) {
     try {
+      console.log('Dados recebidos para criar reserva:', req.body);
+      
+      // Verificar se o hóspede existe
+      if (req.body.hospedeId) {
+        const hospede = await Hospede.findByPk(req.body.hospedeId);
+        if (!hospede) {
+          console.error('Hóspede não encontrado com ID:', req.body.hospedeId);
+          return res.status(400).json({ message: 'Hóspede não encontrado' });
+        }
+        console.log('Hóspede encontrado:', hospede.nomeCompleto);
+      }
+      
       const reserva = await Reserva.create(req.body);
+      console.log('Reserva criada com sucesso:', reserva.idReserva);
       
       // Se houver quartos especificados, criar as associações
       if (req.body.quartoId) {
@@ -68,6 +81,7 @@ class ReservaController {
           Quarto_idQuarto: req.body.quartoId,
           Reserva_idReserva: reserva.idReserva
         });
+        console.log('Associação com quarto criada');
       }
       
       // Buscar a reserva criada com as associações
