@@ -12,5 +12,6 @@ router.put('/:id', ReservaController.atualizar);
 router.delete('/:id', ReservaController.delete);
 router.post('/:id/checkin', ReservaController.checkin);
 router.post('/:id/checkout', ReservaController.checkout);
+router.post('/:id/cancelar', ReservaController.cancelar);
 
 module.exports = router; 
