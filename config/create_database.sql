@@ -269,6 +269,18 @@ CREATE TABLE IF NOT EXISTS `projeto`.`Quarto_has_Reserva` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Inserir dados iniciais
+-- -----------------------------------------------------
+
+-- Inserir endereço padrão para o usuário admin
+INSERT INTO `projeto`.`Endereco` (`cep`, `logradouro`, `numero`, `complemento`, `cidade`, `estado`, `pais`) 
+VALUES ('00000000', 'Rua Admin', 1, 'Admin', 'AdminCity', 'AD', 'Brasil');
+
+-- Inserir usuário admin padrão
+-- Senha: admin123 (criptografada com bcrypt)
+INSERT INTO `projeto`.`Usuario` (`nomeCompleto`, `cpf`, `dtNascimento`, `telefone`, `email`, `senha`, `tipoUsuario`, `Endereco_idEndereco`) 
+VALUES ('Administrador', '00000000000', '1990-01-01', '00000000000', 'admin@admin.com', '$2b$10$cyUjPESQklnnhftJcqMLeeGB0csR7uZt3O7MyaP64JUzy2AEf35HG', 'adm', 1);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

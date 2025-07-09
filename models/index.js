@@ -73,6 +73,19 @@ Endereco.hasMany(Hospede, {
   as: 'hospedes'
 });
 
+// Associação Usuario-Endereco
+Usuario.belongsTo(Endereco, {
+  foreignKey: 'Endereco_idEndereco',
+  targetKey: 'idEndereco',
+  as: 'endereco'
+});
+
+Endereco.hasMany(Usuario, {
+  foreignKey: 'Endereco_idEndereco',
+  sourceKey: 'idEndereco',
+  as: 'usuarios'
+});
+
 // Relacionamento correto Reserva-Hospede (1:N)
 Hospede.hasMany(Reserva, {
   foreignKey: 'hospedeId',
