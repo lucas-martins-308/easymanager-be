@@ -30,7 +30,7 @@ const Reserva = sequelize.define('Reserva', {
     field: 'canalReserva'
   },
   statusReserva: {
-    type: DataTypes.ENUM('confirmada', 'cancelada', 'pendente'),
+    type: DataTypes.ENUM('confirmada', 'cancelada', 'pendente', 'finalizada'),
     allowNull: false,
     field: 'statusReserva'
   },

@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `projeto`.`Reserva` (
   `dtCheckout` DATE NOT NULL,
   `valorReserva` DECIMAL(10,2) NOT NULL,
   `canalReserva` VARCHAR(45) NOT NULL,
-  `statusReserva` ENUM("confirmada", "cancelada", "pendente") NOT NULL,
+  `statusReserva` ENUM("confirmada", "cancelada", "pendente", "finalizada") NOT NULL,
   `hospedeId` INT,
   PRIMARY KEY (`idReserva`),
   INDEX `fk_reserva_hospede_idx` (`hospedeId` ASC) VISIBLE,

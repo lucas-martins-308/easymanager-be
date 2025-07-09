@@ -153,7 +153,7 @@ class ReservaController {
   async checkout(req, res) {
     try {
       const [updated] = await Reserva.update(
-        { statusReserva: 'confirmada' },
+        { statusReserva: 'finalizada' },
         { where: { idReserva: req.params.id } }
       );
       
