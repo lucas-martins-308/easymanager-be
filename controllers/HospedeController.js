@@ -61,9 +61,14 @@ class HospedeController {
 
   async atualizar(req, res) {
     try {
+      console.log('Dados recebidos para atualização:', req.body);
+      console.log('ID do hóspede:', req.params.id);
+      
       const [updated] = await Hospede.update(req.body, {
-        where: { id: req.params.id }
+        where: { idHospede: req.params.id }
       });
+      
+      console.log('Resultado da atualização:', updated);
       
       if (!updated) {
         return res.status(404).json({ message: 'Hóspede não encontrado' });
@@ -72,6 +77,7 @@ class HospedeController {
       const hospede = await Hospede.findByPk(req.params.id);
       res.json(hospede);
     } catch (error) {
+      console.error('Erro na atualização:', error);
       res.status(400).json({ message: error.message });
     }
   }
@@ -79,7 +85,7 @@ class HospedeController {
   async remover(req, res) {
     try {
       const deleted = await Hospede.destroy({
-        where: { id: req.params.id }
+        where: { idHospede: req.params.id }
       });
       
       if (!deleted) {

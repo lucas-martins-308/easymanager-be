@@ -77,8 +77,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `projeto`.`Hospede` (
   `idHospede` INT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(45) NOT NULL,
-  `sobrenome` VARCHAR(45) NOT NULL,
+  `nomeCompleto` VARCHAR(100) NOT NULL,
   `documento` VARCHAR(45) NOT NULL,
   `tipoDocumento` VARCHAR(45) NOT NULL,
   `dtNascimento` DATE NOT NULL,

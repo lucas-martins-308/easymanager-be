@@ -8,15 +8,10 @@ const Hospede = sequelize.define('Hospede', {
     autoIncrement: true,
     field: 'idHospede'
   },
-  nome: {
-    type: DataTypes.STRING(45),
+  nomeCompleto: {
+    type: DataTypes.STRING(100),
     allowNull: false,
-    field: 'nome'
-  },
-  sobrenome: {
-    type: DataTypes.STRING(45),
-    allowNull: false,
-    field: 'sobrenome'
+    field: 'nomeCompleto'
   },
   documento: {
     type: DataTypes.STRING(45),
