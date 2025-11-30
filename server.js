@@ -8,6 +8,8 @@ const fs = require('fs');
 const mysql = require('mysql2/promise');
 const authMiddleware = require('./middlewares/auth');
 
+
+
 const app = express();
 const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
 app.use(cors({
@@ -35,6 +37,14 @@ app.use('/api/pagamentos', pagamentoRoutes);
 app.use('/api/itens', estoqueItemRoutes);
 app.use('/api/quartos', quartoRoutes);
 app.use('/api/fornecedores', fornecedorRoutes);
+
+const countryRoutes = require('./routes/CountryRoutes'); // importar a rota
+app.use('/api/countries', countryRoutes); // registrar a rota
+
+const reportRoutes = require('./routes/ReportRoutes');
+app.use('/api/reports', reportRoutes);
+
+
 
 const PORT = process.env.PORT || 3000;
 
