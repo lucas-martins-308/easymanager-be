@@ -5,7 +5,9 @@ const { Reserva, Hospede } = require('../models');
 const { Op } = require('sequelize');
 const authMiddleware = require('../middlewares/auth');
 
-router.get('/month', authMiddleware, async (req, res) => {
+router.use(authMiddleware);
+
+router.get('/month', async (req, res) => {
     try {
         const { month, year } = req.query;
 
