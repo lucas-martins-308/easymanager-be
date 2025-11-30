@@ -1,10 +1,11 @@
 // routes/ReportRoutes.js
 const express = require('express');
 const router = express.Router();
-const { Reserva } = require('../models'); // ajusta para o seu modelo
+const { Reserva, Hospede } = require('../models');
 const { Op } = require('sequelize');
+const authMiddleware = require('../middlewares/auth');
 
-router.get('/month', async (req, res) => {
+router.get('/month', authMiddleware, async (req, res) => {
     try {
         const { month, year } = req.query;
 
@@ -15,20 +16,40 @@ router.get('/month', async (req, res) => {
         const startDate = new Date(year, month - 1, 1);
         const endDate = new Date(year, month, 0); // último dia do mês
 
+        // Busca reservas com join do hóspede, filtrando por dtCheckin
         const reservas = await Reserva.findAll({
             where: {
-                createdAt: { // ou a coluna de data da reserva
+                dtCheckin: {
                     [Op.between]: [startDate, endDate]
                 }
-            }
+            },
+            include: [{
+                model: Hospede,
+                as: 'hospede',
+                attributes: ['nomeCompleto']
+            }],
+            order: [['idReserva', 'ASC']]
         });
 
-        const totalReservas = reservas.length;
-        const totalValor = reservas.reduce((acc, r) => acc + r.valor, 0);
+        // Mapeia os dados para o formato esperado pelo frontend
+        const detalhes = reservas.map(reserva => ({
+            idReserva: reserva.idReserva,
+            hospede: reserva.hospede ? reserva.hospede.nomeCompleto : 'N/A',
+            checkin: reserva.dtCheckin,
+            checkout: reserva.dtCheckout,
+            valor: parseFloat(reserva.valorReserva) || 0
+        }));
 
-        res.json({ totalReservas, totalValor });
+        const totalReservas = detalhes.length;
+        const totalValor = detalhes.reduce((acc, r) => acc + r.valor, 0);
+
+        res.json({
+            totalReservas,
+            totalValor,
+            detalhes
+        });
     } catch (err) {
-        console.error(err);
+        console.error('Erro ao gerar relatório:', err);
         res.status(500).json({ error: 'Erro ao gerar relatório' });
     }
 });
