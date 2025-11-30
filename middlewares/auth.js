@@ -2,7 +2,14 @@ const jwt = require('jsonwebtoken');
 const env = require('../config/env');
 
 module.exports = (req, res, next) => {
+  // Ignora requisições OPTIONS (preflight do CORS)
+  if (req.method === 'OPTIONS') {
+    return next();
+  }
+
   const authHeader = req.headers.authorization;
+  console.log('Auth middleware - Method:', req.method, 'Path:', req.path);
+  console.log('Auth middleware - Authorization header:', authHeader ? 'Presente' : 'Ausente');
 
   if (!authHeader) {
     console.log('Auth middleware: Token não fornecido');
